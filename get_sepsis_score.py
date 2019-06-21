@@ -43,6 +43,18 @@ def get_sepsis_score(data1, Trained_model):
 	RR = pd.pivot_table(df_test,values='Resp',index='ID',columns='ICULOS')
 	BP = pd.pivot_table(df_test,values='SBP',index='ID',columns='ICULOS')
 	latest = pd.pivot_table(df_test,values='HR',index='ID',columns='ICULOS')
+	
+	Fibrinogen = pd.pivot_table(df_test,values='Fibrinogen',index='ID',columns='ICULOS')
+	Glucose = pd.pivot_table(df_test,values='Glucose',index='ID',columns='ICULOS')
+	HCO3 = pd.pivot_table(df_test,values='HCO3',index='ID',columns='ICULOS')
+	WBC = pd.pivot_table(df_test,values='WBC',index='ID',columns='ICULOS')
+	HospAdmTime = pd.pivot_table(df_test,values='HospAdmTime',index='ID',columns='ICULOS')
+	EtCO2 = pd.pivot_table(df_test,values='EtCO2',index='ID',columns='ICULOS')
+	BaseExcess = pd.pivot_table(df_test,values='BaseExcess',index='ID',columns='ICULOS')
+	Creatinine = pd.pivot_table(df_test,values='Creatinine',index='ID',columns='ICULOS')
+	Platelets = pd.pivot_table(df_test,values='Platelets',index='ID',columns='ICULOS')
+	age = pd.pivot_table(df_test,values='Age',index='ID',columns='ICULOS')
+	gender = pd.pivot_table(df_test,values='Gender',index='ID',columns='ICULOS')
 
 	Heart_rate_test = latest 
 	RR_test = RR 
@@ -60,14 +72,26 @@ def get_sepsis_score(data1, Trained_model):
 	DBP_test = DBP_test.fillna(0)
 	O2Sat_test = O2Sat_test.fillna(0)
 	
+	age = age.fillna(0)
+	gender = gender.fillna(0)
+	HospAdmTime_test2 = HospAdmTime.fillna(0)
+	EtCO2_test2 = EtCO2.fillna(0)
+	BaseExcess_test2 = BaseExcess.fillna(0)
+	Creatinine_test2 = Creatinine.fillna(0)
+	Platelets_test2 = Platelets.fillna(0)
+	WBC2_test = WBC.fillna(0)
+	HCO32_test = HCO3.fillna(0)
+	Glucose2_test = Glucose.fillna(0)
+	Fibrinogen2_test = Fibrinogen.fillna(0)
+	
 	#Since we are using a windows-based approach (6-hour window size), we pad our output for the 6 hours following patients admission.
 
 	scores1 = 0
 	labels1 = 0
 	
 	if l <7:
-		scores1=1
-		labels1=1
+		scores1=0
+		labels1=0
 	else:
 		#Get dataframe of probs
 		#Windows based approach
@@ -77,6 +101,15 @@ def get_sepsis_score(data1, Trained_model):
 		Temp2_test = Temp_test.iloc[:, l-6:l]
 		DBP2_test = DBP_test.iloc[:, l-6:l]
 		O2Sat2_test = O2Sat_test.iloc[:, l-6:l]
+		
+		EtCO22 = EtCO2_test2.iloc[:, l-6:l]
+		BaseExcess2 = BaseExcess_test2.iloc[:, l-6:l]
+		Creatinine2 = Creatinine_test2.iloc[:, l-6:l]
+		Platelets2 = Platelets_test2.iloc[:, l-6:l]
+		WBC2 = WBC2_test.iloc[:, l-6:l]
+		HCO32 = HCO32_test.iloc[:, l-6:l]
+		Glucose2 = Glucose2_test.iloc[:, l-6:l]
+		Fibrinogen2 = Fibrinogen2_test.iloc[:, l-6:l]
 
 		result['HR_min'] = Heart_rate_test.min(axis=1)
 		result['HR_mean'] = Heart_rate_test.mean(axis=1)
@@ -125,8 +158,77 @@ def get_sepsis_score(data1, Trained_model):
 		result['Temp_var'] = Temp2_test.var(axis=1)
 		result['Temp_skew'] = Temp2_test.skew(axis=1)
 		result['Temp_kurt'] = Temp2_test.kurt(axis=1)
+		
+		result['Age'] = age.max(axis=1)
+		result['Gender'] = gender.max(axis=1)
+
+		result['HospAdmTime'] = HospAdmTime_test2.min(axis=1)
+
+		result['EtCO2_min'] = EtCO22.min(axis=1)
+		result['EtCO2_mean'] = EtCO22.mean(axis=1)
+		result['EtCO2_max'] = EtCO22.max(axis=1)
+		result['EtCO2_stdev'] = EtCO22.std(axis=1)
+		result['EtCO2_var'] = EtCO22.var(axis=1)
+		result['EtCO2_skew'] = EtCO22.skew(axis=1)
+		result['EtCO2_kurt'] = EtCO22.kurt(axis=1)
+
+		result['BaseExcess2_min'] = BaseExcess2.min(axis=1)
+		result['BaseExcess2_mean'] = BaseExcess2.mean(axis=1)
+		result['BaseExcess2_max'] = BaseExcess2.max(axis=1)
+		result['BaseExcess2_stdev'] = BaseExcess2.std(axis=1)
+		result['BaseExcess2_var'] = BaseExcess2.var(axis=1)
+		result['BaseExcess2_skew'] = BaseExcess2.skew(axis=1)
+		result['BaseExcess2_kurt'] = BaseExcess2.kurt(axis=1)
+
+		result['Creatinine2_min'] = Creatinine2.min(axis=1)
+		result['Creatinine2_mean'] = Creatinine2.mean(axis=1)
+		result['Creatinine2_max'] = Creatinine2.max(axis=1)
+		result['Creatinine2_stdev'] = Creatinine2.std(axis=1)
+		result['Creatinine2_var'] = Creatinine2.var(axis=1)
+		result['Creatinine2_skew'] = Creatinine2.skew(axis=1)
+		result['Creatinine2_kurt'] = Creatinine2.kurt(axis=1)
+
+		result['Platelets2_min'] = Platelets2.min(axis=1)
+		result['Platelets2_mean'] = Platelets2.mean(axis=1)
+		result['Platelets2_max'] = Platelets2.max(axis=1)
+		result['Platelets2_stdev'] = Platelets2.std(axis=1)
+		result['Platelets2_var'] = Platelets2.var(axis=1)
+		result['Platelets2_skew'] = Platelets2.skew(axis=1)
+		result['Platelets2_kurt'] = Platelets2.kurt(axis=1)
+		
+		result['WBC2_min'] = WBC2.min(axis=1)
+		result['WBC2_mean'] = WBC2.mean(axis=1)
+		result['WBC2_max'] = WBC2.max(axis=1)
+		result['WBC2_stdev'] = WBC2.std(axis=1)
+		result['WBC2_var'] = WBC2.var(axis=1)
+		result['WBC2_skew'] = WBC2.skew(axis=1)
+		result['WBC2_kurt'] = WBC2.kurt(axis=1) 
+
+		result['HCO3_min'] = HCO32.min(axis=1)
+		result['HCO3_mean'] = HCO32.mean(axis=1)
+		result['HCO3_max'] = HCO32.max(axis=1)
+		result['HCO3_stdev'] = HCO32.std(axis=1)
+		result['HCO3_var'] = HCO32.var(axis=1)
+		result['HCO3_skew'] = HCO32.skew(axis=1)
+		result['HCO3_kurt'] = HCO32.kurt(axis=1)
+
+		result['Glucose_min'] = Glucose2.min(axis=1)
+		result['Glucose_mean'] = Glucose2.mean(axis=1)
+		result['Glucose_max'] = Glucose2.max(axis=1)
+		result['Glucose_stdev'] = Glucose2.std(axis=1)
+		result['Glucose_var'] = Glucose2.var(axis=1)
+		result['Glucose_skew'] = Glucose2.skew(axis=1)
+		result['Glucose_kurt'] = Glucose2.kurt(axis=1)
+
+		result['Fibrinogen_min'] = Fibrinogen2.min(axis=1)
+		result['Fibrinogen_mean'] = Fibrinogen2.mean(axis=1)
+		result['Fibrinogen_max'] = Fibrinogen2.max(axis=1)
+		result['Fibrinogen_stdev'] = Fibrinogen2.std(axis=1)
+		result['Fibrinogen_var'] = Fibrinogen2.var(axis=1)
+		result['Fibrinogen_skew'] = Fibrinogen2.skew(axis=1)
+		result['Fibrinogen_kurt'] = Fibrinogen2.kurt(axis=1)
  
-		X_test = result.values[:, Temp2_test.shape[1]:Temp2_test.shape[1]+42] 
+		X_test = result.values[:, Temp2_test.shape[1]:Temp2_test.shape[1]+101] 
 		scores = Trained_model.predict_proba(X_test)
 		scores1 = scores[0][1]
 

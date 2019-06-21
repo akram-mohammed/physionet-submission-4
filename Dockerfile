@@ -21,6 +21,9 @@ rm -rf /var/lib/apt/lists/*
 # set python 3 as the default python version
 RUN update-alternatives --install /usr/bin/python python /usr/bin/python3.6 1
 
+RUN pip3 install cloudpickle==0.5.6
+RUN pip3 install scikit-learn==0.19.1
+
 ## DO NOT EDIT THESE 3 lines
 RUN mkdir /physionet2019
 COPY ./ /physionet2019
