@@ -41,13 +41,11 @@ if __name__ == '__main__':
 
     # Load model.
     model = load_sepsis_model()
-
     # Iterate over files.
     for f in files:
         # Load data.
         input_file = os.path.join(input_directory, f)
         data = load_challenge_data(input_file)
-
         # Make predictions.
         num_rows = len(data)
         scores = np.zeros(num_rows)
@@ -60,4 +58,5 @@ if __name__ == '__main__':
 
         # Save results.
         output_file = os.path.join(output_directory, f)
+
         save_challenge_predictions(output_file, scores, labels)

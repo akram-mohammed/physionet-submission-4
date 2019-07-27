@@ -23,6 +23,8 @@ RUN update-alternatives --install /usr/bin/python python /usr/bin/python3.6 1
 
 RUN pip3 install cloudpickle==0.5.6
 RUN pip3 install scikit-learn==0.19.1
+RUN pip3 install keras
+RUN pip3 install tensorflow
 
 ## DO NOT EDIT THESE 3 lines
 RUN mkdir /physionet2019
